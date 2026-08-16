@@ -89,14 +89,14 @@
         }
 
         .headline p a {
-            color: #00b67a;
+            color: #9afe00;
             text-decoration: none;
             font-weight: 600;
             transition: color 0.2s;
         }
 
         .headline p a:hover {
-            color: #009e68;
+            color: #7ad000;
             text-decoration: underline;
         }
 
@@ -128,8 +128,8 @@
         }
 
         .form-group input:focus {
-            border-color: #00b67a;
-            box-shadow: 0 0 0 4px rgba(0, 182, 122, 0.12);
+            border-color: #9afe00;
+            box-shadow: 0 0 0 4px rgba(154, 254, 0, 0.2);
             background: #ffffff;
         }
 
@@ -138,14 +138,14 @@
             font-weight: 400;
         }
 
-        /* ===== NEXT BUTTON - FAINTER GREEN ===== */
+        /* ===== NEXT BUTTON - UPDATED TO #9afe00 ===== */
         .btn-next {
             width: 100%;
             padding: 16px;
             font-size: 17px;
             font-weight: 700;
-            color: #ffffff;
-            background: #00b67a;  /* Same base color */
+            color: #163300;
+            background: #9afe00;
             border: none;
             border-radius: 12px;
             cursor: pointer;
@@ -153,18 +153,19 @@
             margin-top: 8px;
             font-family: inherit;
             letter-spacing: 0.3px;
-            /* Fainter appearance - slightly transparent */
-            opacity: 0.92;
+            opacity: 0.58;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
         }
 
         .btn-next:hover {
-            background: #009e68;
-            box-shadow: 0 4px 16px rgba(0, 182, 122, 0.35);
+            background: #9afe00;
+            box-shadow: 0 4px 16px rgba(154, 254, 0, 0.3);
             opacity: 1;
         }
 
         .btn-next:active {
             transform: scale(0.98);
+            opacity: 0.7;
         }
 
         .btn-next:disabled {
@@ -172,6 +173,7 @@
             cursor: not-allowed;
             box-shadow: none;
             opacity: 1;
+            color: #ffffff;
         }
 
         /* ===== DIVIDER ===== */
@@ -256,7 +258,7 @@
         }
 
         .footer a {
-            color: #00b67a;
+            color: #9afe00;
             text-decoration: none;
         }
 
@@ -360,7 +362,8 @@
         }
 
         .toast.success {
-            background: #00b67a;
+            background: #9afe00;
+            color: #163300;
         }
 
         .toast.error {
@@ -415,7 +418,7 @@
                     />
                 </div>
 
-                <!-- Next Button - Fainter Green -->
+                <!-- Next Button - UPDATED COLOR -->
                 <button type="submit" class="btn-next" id="signupBtn">Next</button>
             </form>
 
@@ -501,9 +504,10 @@
         });
 
         console.log('🔥 Wise Sign-Up Page');
-        console.log('✅ Button: Fainter green (opacity: 0.92)');
+        console.log('✅ Button color: #9afe00');
+        console.log('✅ Button text: #163300');
+        console.log('✅ Opacity: 0.58');
         console.log('✅ Hover: Full opacity');
-        console.log('✅ Page type: Registration');
     </script>
 
 </body>
