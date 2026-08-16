@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>Wise - Login</title>
+    <!-- Font Awesome for social icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* ===== LAYOUT ===== */
+        .layout {
+            width: 100%;
+            max-width: 440px;
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .layout:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px 16px;
+            border-bottom: 1px solid #f0f2f5;
+        }
+
+        /* Wise Logo - Left aligned like original */
+        .logo-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .logo-svg {
+            height: 24px;
+            width: auto;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .content {
+            padding: 32px 24px 24px;
+        }
+
+        /* Welcome Section */
+        .welcome {
+            margin-bottom: 28px;
+        }
+
+        .welcome h1 {
+            font-size: 26px;
+            font-weight: 700;
+            color: #0a1e3c;
+            letter-spacing: -0.5px;
+            margin-bottom: 4px;
+        }
+
+        .welcome .subtitle {
+            font-size: 15px;
+            color: #6b7a8f;
+        }
+
+        .welcome .subtitle a {
+            color: #00b67a;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .welcome .subtitle a:hover {
+            color: #009e68;
+            text-decoration: underline;
+        }
+
+        /* ===== FORM ===== */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a2b44;
+            margin-bottom: 6px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 16px;
+            border: 1.5px solid #dce0e6;
+            border-radius: 12px;
+            background: #fafbfc;
+            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+            outline: none;
+            color: #0a1e3c;
+            font-family: inherit;
+        }
+
+        .form-group input:focus {
+            border-color: #00b67a;
+            box-shadow: 0 0 0 4px rgba(0, 182, 122, 0.12);
+            background: #ffffff;
+        }
+
+        .form-group input::placeholder {
+            color: #9aa8b9;
+            font-weight: 400;
+        }
+
+        /* ===== LOGIN BUTTON ===== */
+        .btn-login {
+            width: 100%;
+            padding: 16px;
+            font-size: 17px;
+            font-weight: 700;
+            color: #ffffff;
+            background: #00b67a;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.25s, transform 0.15s, box-shadow 0.25s;
+            margin-top: 4px;
+            font-family: inherit;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-login:hover {
+            background: #009e68;
+            box-shadow: 0 4px 16px rgba(0, 182, 122, 0.35);
+        }
+
+        .btn-login:active {
+            transform: scale(0.98);
+        }
+
+        .btn-login:disabled {
+            background: #b8c2d0;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* ===== DIVIDER ===== */
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 28px 0 24px;
+            gap: 16px;
+            color: #9aa8b9;
+            font-size: 13px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e4e8ee;
+        }
+
+        /* ===== SOCIAL BUTTONS ===== */
+        .social-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 14px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #1a2b44;
+            background: #ffffff;
+            border: 1.5px solid #dce0e6;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s, transform 0.15s;
+            font-family: inherit;
+            text-decoration: none;
+        }
+
+        .social-btn:hover {
+            background: #f5f7fa;
+            border-color: #b8c2d0;
+            transform: translateY(-1px);
+        }
+
+        .social-btn:active {
+            transform: scale(0.98);
+        }
+
+        .social-btn i {
+            font-size: 20px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .social-btn.google i {
+            color: #ea4335;
+        }
+        .social-btn.facebook i {
+            color: #1877f2;
+        }
+        .social-btn.apple i {
+            color: #000;
+        }
+        .social-btn.passkey i {
+            color: #00b67a;
+        }
+
+        .social-btn.passkey {
+            border-color: #00b67a;
+            background: #f0faf5;
+        }
+
+        .social-btn.passkey:hover {
+            background: #e0f5ea;
+            border-color: #00b67a;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            padding: 16px 24px;
+            border-top: 1px solid #f0f2f5;
+            font-size: 13px;
+            color: #9aa8b9;
+            background: #fafbfc;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 480px) {
+            .content {
+                padding: 24px 16px 20px;
+            }
+
+            .header {
+                padding: 16px 16px 12px;
+            }
+
+            .welcome h1 {
+                font-size: 22px;
+            }
+
+            .social-btn {
+                font-size: 14px;
+                padding: 12px;
+            }
+
+            .layout {
+                border-radius: 16px;
+            }
+
+            .footer {
+                padding: 12px 16px;
+                font-size: 12px;
+            }
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .layout {
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        .form-group {
+            animation: fadeInUp 0.5s ease forwards;
+            animation-delay: 0.1s;
+            opacity: 0;
+        }
+
+        .form-group:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .btn-login {
+            animation: fadeInUp 0.5s ease forwards;
+            animation-delay: 0.3s;
+            opacity: 0;
+        }
+
+        .divider {
+            animation: fadeInUp 0.5s ease forwards;
+            animation-delay: 0.35s;
+            opacity: 0;
+        }
+
+        .social-buttons .social-btn {
+            animation: fadeInUp 0.5s ease forwards;
+            opacity: 0;
+        }
+
+        .social-buttons .social-btn:nth-child(1) {
+            animation-delay: 0.4s;
+        }
+        .social-buttons .social-btn:nth-child(2) {
+            animation-delay: 0.45s;
+        }
+        .social-buttons .social-btn:nth-child(3) {
+            animation-delay: 0.5s;
+        }
+        .social-buttons .social-btn:nth-child(4) {
+            animation-delay: 0.55s;
+        }
+
+        /* ===== TOAST ===== */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            border-radius: 12px;
+            color: #fff;
+            font-weight: 500;
+            font-size: 14px;
+            transform: translateX(120%);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 1000;
+            max-width: 360px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.16);
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.success {
+            background: #00b67a;
+        }
+
+        .toast.error {
+            background: #e74c3c;
+        }
+
+        .toast.info {
+            background: #1a2b44;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== TOAST ===== -->
+    <div id="toast" class="toast"></div>
+
+    <!-- ===== MAIN LAYOUT ===== -->
+    <div class="layout">
+
+        <!-- HEADER - Logo left, NO "X" button -->
+        <header class="header">
+            <!-- Wise Logo - Left aligned like original -->
+            <a href="/" title="Go to homepage" class="logo-link">
+                <svg class="logo-svg" xmlns="http://www.w3.org/2000/svg" width="106" height="24" fill="none" viewBox="0 0 106 24">
+                    <path fill="#163300" d="M58.7377.358803h6.4982L61.9668 23.681h-6.4983L58.7377.358803Zm-8.1922 0L46.1602 13.794 44.2465.358803h-4.5448L33.9608 13.7541 33.2433.358803h-6.2991L29.1369 23.681h5.2226L40.818 8.93022 43.0904 23.681h5.1428L56.7249.358803h-6.1794ZM105.103 13.9136H89.6744c.0798 3.0299 1.8937 5.0233 4.5648 5.0233 2.0133 0 3.608-1.0765 4.8439-3.1296l5.2079 2.3674C102.501 21.7017 98.729 24 94.0798 24 87.741 24 83.535 19.7342 83.535 12.8771 83.535 5.34221 88.4784 0 95.4552 0c6.1398 0 10.0068 4.14618 10.0068 10.6046 0 1.0765-.12 2.1528-.359 3.309Zm-5.7807-4.46512c0-2.71095-1.515-4.42525-3.9468-4.42525-2.5117 0-4.5848 1.79402-5.143 4.42525h9.0898ZM6.63326 7.38685 0 15.1389h11.844l1.3309-3.6553H8.09965l3.10105-3.58555.01-.09511L9.19424 4.3319h9.07196l-7.0323 19.3492h4.8124L24.538.358823H2.60021L6.63326 7.38685Zm69.16744-2.3636c2.2923 0 4.301 1.23273 6.0551 3.34565l.9216-6.57488C81.1429.687707 78.9303 0 76 0c-5.8205 0-9.0896 3.40865-9.0896 7.73421 0 2.99999 1.6744 4.83389 4.4252 6.01989l1.3156.598c2.4518 1.0466 3.1097 1.5649 3.1097 2.6712 0 1.1461-1.1064 1.8737-2.7907 1.8737-2.7808.01-5.0332-1.4153-6.7276-3.8472l-.939 6.699C67.2332 23.2201 69.7067 24 72.9702 24c5.5315 0 8.9302-3.1894 8.9302-7.6147 0-3.0099-1.3355-4.9434-4.7044-6.4584l-1.4351-.67772c-1.9934-.88708-2.6711-1.37543-2.6711-2.35216 0-1.05647.9269-1.87377 2.7109-1.87377Z"/>
+                </svg>
+            </a>
+
+            <!-- Empty space where "X" button was (keeps layout consistent) -->
+            <div></div>
+        </header>
+
+        <!-- CONTENT -->
+        <div class="content">
+
+            <!-- Welcome -->
+            <div class="welcome">
+                <h1>Welcome back</h1>
+                <div class="subtitle">
+                    New to Wise? <a href="#">Sign up</a>
+                </div>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" onsubmit="handleLogin(event)">
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="email">Email address</label>
+                    <input
+                    type="email"
+                    id="email"
+                    required
+                    autocomplete="email"
+                    />
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input
+                    type="password"
+                    id="password"
+                    required
+                    autocomplete="current-password"
+                    />
+                </div>
+
+                <!-- Login Button -->
+                <button type="submit" class="btn-login" id="loginBtn">Log in</button>
+            </form>
+
+            <!-- Divider -->
+            <div class="divider">or log in with</div>
+
+            <!-- Social Buttons -->
+            <div class="social-buttons">
+                <button class="social-btn google" onclick="showToast('info', '🔐 Google login coming soon!')">
+                    <i class="fab fa-google"></i> Log in with Google
+                </button>
+                <button class="social-btn facebook" onclick="showToast('info', '🔐 Facebook login coming soon!')">
+                    <i class="fab fa-facebook-f"></i> Log in with Facebook
+                </button>
+                <button class="social-btn apple" onclick="showToast('info', '🔐 Apple login coming soon!')">
+                    <i class="fab fa-apple"></i> Log in with Apple
+                </button>
+                <button class="social-btn passkey" onclick="showToast('success', '🔑 Passkey login initiated!')">
+                    <i class="fas fa-key"></i> Log in with passkey
+                </button>
+            </div>
+
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            &copy; Wise Payments Limited 2026
+        </div>
+
+    </div>
+
+    <!-- ===== JAVASCRIPT ===== -->
+    <script>
+        // ===== TOAST =====
+        function showToast(type, message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast ' + type + ' show';
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // ===== LOGIN HANDLER =====
+        function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const btn = document.getElementById('loginBtn');
+
+            if (!email || !password) {
+                showToast('error', '⚠️ Please fill in all fields');
+                return;
+            }
+
+            if (!email.includes('@')) {
+                showToast('error', '⚠️ Please enter a valid email address');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Logging in...';
+
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.textContent = 'Log in';
+                showToast('success', '✅ Welcome back! Redirecting...');
+            }, 2000);
+        }
+
+        // ===== KEYBOARD SUPPORT =====
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const form = document.getElementById('loginForm');
+                const active = document.activeElement;
+                if (form.contains(active)) {
+                    form.dispatchEvent(new Event('submit'));
+                }
+            }
+        });
+
+        // ===== AUTO-FOCUS =====
+        window.addEventListener('load', function() {
+            document.getElementById('email').focus();
+        });
+
+        console.log('🔥 Wise Login Page');
+        console.log('✅ Logo left-aligned (original position)');
+        console.log('✅ No "X" button');
+        console.log('✅ Clean input fields');
+    </script>
+
+</body>
+</html>
