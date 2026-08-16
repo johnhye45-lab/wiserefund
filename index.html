@@ -95,6 +95,7 @@
             text-decoration: none;
             font-weight: 600;
             transition: color 0.2s;
+            cursor: pointer;
         }
 
         .welcome .subtitle a:hover {
@@ -246,6 +247,16 @@
             background: #fafbfc;
         }
 
+        /* ===== PAGE TRANSITION ===== */
+        .page {
+            display: none;
+            animation: fadeInUp 0.4s ease forwards;
+        }
+
+        .page.active {
+            display: block;
+        }
+
         /* ===== RESPONSIVE ===== */
         @media (max-width: 480px) {
             .content {
@@ -289,34 +300,6 @@
 
         .layout {
             animation: fadeInUp 0.5s ease forwards;
-        }
-
-        .form-group {
-            animation: fadeInUp 0.5s ease forwards;
-            animation-delay: 0.1s;
-            opacity: 0;
-        }
-
-        .form-group:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .btn-login {
-            animation: fadeInUp 0.5s ease forwards;
-            animation-delay: 0.3s;
-            opacity: 0;
-        }
-
-        .divider {
-            animation: fadeInUp 0.5s ease forwards;
-            animation-delay: 0.35s;
-            opacity: 0;
-        }
-
-        .social-buttons .social-btn {
-            animation: fadeInUp 0.5s ease forwards;
-            opacity: 0;
-            animation-delay: 0.4s;
         }
 
         /* ===== TOAST ===== */
@@ -371,56 +354,103 @@
             <div class="header-spacer"></div>
         </header>
 
-        <!-- CONTENT -->
-        <div class="content">
+        <!-- ===== LOGIN PAGE ===== -->
+        <div id="loginPage" class="page active">
+            <div class="content">
 
-            <!-- Welcome -->
-            <div class="welcome">
-                <h1>Welcome back</h1>
-                <div class="subtitle">
-                    New to Wise? <a href="#">Sign up</a>
+                <!-- Welcome -->
+                <div class="welcome">
+                    <h1>Welcome back</h1>
+                    <div class="subtitle">
+                        New to Wise? <a onclick="showSignup()">Sign up</a>
+                    </div>
                 </div>
+
+                <!-- Login Form -->
+                <form id="loginForm" onsubmit="handleLogin(event)">
+
+                    <!-- Email -->
+                    <div class="form-group">
+                        <label for="email">Email address</label>
+                        <input
+                        type="email"
+                        id="email"
+                        required
+                        autocomplete="email"
+                        />
+                    </div>
+
+                    <!-- Password -->
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input
+                        type="password"
+                        id="password"
+                        required
+                        autocomplete="current-password"
+                        />
+                    </div>
+
+                    <!-- Login Button -->
+                    <button type="submit" class="btn-login" id="loginBtn">Log in</button>
+                </form>
+
+                <!-- Divider -->
+                <div class="divider">or log in with</div>
+
+                <!-- Social Buttons - ONLY GOOGLE -->
+                <div class="social-buttons">
+                    <button class="social-btn google" onclick="showToast('info', '🔐 Google login coming soon!')">
+                        <i class="fab fa-google"></i> Log in with Google
+                    </button>
+                </div>
+
             </div>
+        </div>
 
-            <!-- Login Form -->
-            <form id="loginForm" onsubmit="handleLogin(event)">
+        <!-- ===== SIGNUP PAGE ===== -->
+        <div id="signupPage" class="page">
+            <div class="content" style="text-align: center;">
 
-                <!-- Email -->
-                <div class="form-group">
-                    <label for="email">Email address</label>
-                    <input
-                    type="email"
-                    id="email"
-                    required
-                    autocomplete="email"
-                    />
+                <!-- Headline -->
+                <div class="welcome">
+                    <h1>Create your Wise account</h1>
+                    <div class="subtitle">
+                        Already have an account? <a onclick="showLogin()">Log in</a>
+                    </div>
                 </div>
 
-                <!-- Password -->
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input
-                    type="password"
-                    id="password"
-                    required
-                    autocomplete="current-password"
-                    />
+                <!-- Signup Form -->
+                <form id="signupForm" onsubmit="handleSignup(event)">
+
+                    <!-- Email -->
+                    <div class="form-group" style="text-align: left;">
+                        <label for="signupEmail">First, enter your email address</label>
+                        <input
+                        type="email"
+                        id="signupEmail"
+                        name="email"
+                        autocomplete="email"
+                        required
+                        placeholder="name@example.com"
+                        />
+                    </div>
+
+                    <!-- Next Button -->
+                    <button type="submit" class="btn-login" id="signupBtn" style="opacity: 0.92;">Next</button>
+                </form>
+
+                <!-- Divider -->
+                <div class="divider">Or sign up with</div>
+
+                <!-- Social Buttons - ONLY GOOGLE -->
+                <div class="social-buttons">
+                    <button class="social-btn google" onclick="showToast('info', '🔐 Google sign-up coming soon!')">
+                        <i class="fab fa-google"></i> Sign up with Google
+                    </button>
                 </div>
 
-                <!-- Login Button -->
-                <button type="submit" class="btn-login" id="loginBtn">Log in</button>
-            </form>
-
-            <!-- Divider -->
-            <div class="divider">or log in with</div>
-
-            <!-- Social Buttons - ONLY GOOGLE -->
-            <div class="social-buttons">
-                <button class="social-btn google" onclick="showToast('info', '🔐 Google login coming soon!')">
-                    <i class="fab fa-google"></i> Log in with Google
-                </button>
             </div>
-
         </div>
 
         <!-- FOOTER -->
@@ -432,6 +462,25 @@
 
     <!-- ===== JAVASCRIPT ===== -->
     <script>
+        // ===== PAGE NAVIGATION =====
+        function showSignup() {
+            document.getElementById('loginPage').classList.remove('active');
+            document.getElementById('signupPage').classList.add('active');
+            // Focus on signup email field
+            setTimeout(() => {
+                document.getElementById('signupEmail').focus();
+            }, 100);
+        }
+
+        function showLogin() {
+            document.getElementById('signupPage').classList.remove('active');
+            document.getElementById('loginPage').classList.add('active');
+            // Focus on login email field
+            setTimeout(() => {
+                document.getElementById('email').focus();
+            }, 100);
+        }
+
         // ===== TOAST =====
         function showToast(type, message) {
             const toast = document.getElementById('toast');
@@ -469,26 +518,56 @@
             }, 2000);
         }
 
+        // ===== SIGNUP HANDLER =====
+        function handleSignup(event) {
+            event.preventDefault();
+            const email = document.getElementById('signupEmail').value;
+            const btn = document.getElementById('signupBtn');
+
+            if (!email) {
+                showToast('error', '⚠️ Please enter your email address');
+                return;
+            }
+
+            if (!email.includes('@')) {
+                showToast('error', '⚠️ Please enter a valid email address');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Creating account...';
+
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.textContent = 'Next';
+                showToast('success', '✅ Email verified! Proceeding to next step...');
+            }, 2000);
+        }
+
         // ===== KEYBOARD SUPPORT =====
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
-                const form = document.getElementById('loginForm');
+                const loginForm = document.getElementById('loginForm');
+                const signupForm = document.getElementById('signupForm');
                 const active = document.activeElement;
-                if (form.contains(active)) {
-                    form.dispatchEvent(new Event('submit'));
+
+                if (loginForm.contains(active)) {
+                    loginForm.dispatchEvent(new Event('submit'));
+                } else if (signupForm.contains(active)) {
+                    signupForm.dispatchEvent(new Event('submit'));
                 }
             }
         });
 
-        // ===== AUTO-FOCUS =====
+        // ===== AUTO-FOCUS ON LOAD =====
         window.addEventListener('load', function() {
             document.getElementById('email').focus();
         });
 
-        console.log('🔥 Wise Login Page');
-        console.log('✅ Only Google social login');
-        console.log('✅ Removed: Facebook, Apple, Passkey');
-        console.log('✅ Clean input fields');
+        console.log('🔥 Wise - Login & Signup Pages');
+        console.log('✅ Click "Sign up" → goes to signup page');
+        console.log('✅ Click "Log in" → goes to login page');
+        console.log('✅ Smooth page transitions');
     </script>
 
 </body>
