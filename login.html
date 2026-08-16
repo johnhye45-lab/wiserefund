@@ -7,7 +7,7 @@
     <!-- Font Awesome for social icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <style>
         /* ===== RESET & BASE ===== */
         * {
@@ -27,44 +27,88 @@
             padding: 20px;
         }
 
+        /* ===== ANIMATED BACKGROUND ===== */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 30% 50%, rgba(154, 254, 0, 0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 80%, rgba(0, 182, 122, 0.06) 0%, transparent 50%);
+            z-index: -1;
+            animation: floatBackground 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes floatBackground {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            100% {
+                transform: translate(2%, 3%) rotate(3deg);
+            }
+        }
+
         /* ===== LAYOUT ===== */
         .layout {
             width: 100%;
             max-width: 440px;
             background: #ffffff;
-            border-radius: 24px;
-            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.08);
+            border-radius: 32px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.04);
             overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
         }
 
         .layout:hover {
             transform: translateY(-4px);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 32px 80px rgba(0, 0, 0, 0.12);
         }
 
-        /* ===== HEADER ===== */
+        /* ===== HEADER - ORIGINAL POSITION ===== */
         .header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 20px 24px 16px;
             border-bottom: 1px solid #f0f2f5;
+            background: #ffffff;
         }
 
-        .logo-link {
+        .header .logo-link {
             display: flex;
             align-items: center;
             text-decoration: none;
         }
 
-        .logo-svg {
+        .header .logo-link svg {
             height: 24px;
             width: auto;
         }
 
-        .header-spacer {
+        /* Close button (X) - kept for original look */
+        .close-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #6b7a8f;
+            padding: 4px;
+            border-radius: 50%;
+            transition: background 0.2s, color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            background: #f0f2f5;
+            color: #0a1e3c;
+        }
+
+        .close-btn svg {
             width: 24px;
+            height: 24px;
         }
 
         /* ===== MAIN CONTENT ===== */
@@ -91,7 +135,7 @@
         }
 
         .welcome .subtitle a {
-            color: #00b67a;
+            color: #9afe00;
             text-decoration: none;
             font-weight: 600;
             transition: color 0.2s;
@@ -99,11 +143,11 @@
         }
 
         .welcome .subtitle a:hover {
-            color: #009e68;
+            color: #7ad000;
             text-decoration: underline;
         }
 
-        /* ===== FORM ===== */
+        /* ===== FORM WITH CLEAN INPUTS ===== */
         .form-group {
             margin-bottom: 20px;
         }
@@ -130,24 +174,24 @@
         }
 
         .form-group input:focus {
-            border-color: #00b67a;
-            box-shadow: 0 0 0 4px rgba(0, 182, 122, 0.12);
+            border-color: #9afe00;
+            box-shadow: 0 0 0 4px rgba(154, 254, 0, 0.2);
             background: #ffffff;
         }
 
+        /* ===== CLEAN INPUTS - NO PLACEHOLDER TEXT ===== */
         .form-group input::placeholder {
-            color: #9aa8b9;
-            font-weight: 400;
+            color: transparent;
         }
 
-        /* ===== LOGIN BUTTON - ONLY COLOR CHANGED ===== */
+        /* ===== LOGIN BUTTON ===== */
         .btn-login {
             width: 100%;
             padding: 16px;
             font-size: 17px;
             font-weight: 700;
             color: #163300;
-            background: #9afe00;  /* ← ONLY THIS CHANGED */
+            background: #9afe00;
             border: none;
             border-radius: 12px;
             cursor: pointer;
@@ -196,7 +240,7 @@
             background: #e4e8ee;
         }
 
-        /* ===== SOCIAL BUTTONS - ONLY GOOGLE ===== */
+        /* ===== SOCIAL BUTTONS - REAL GOOGLE BUTTON ===== */
         .social-buttons {
             display: flex;
             flex-direction: column;
@@ -233,14 +277,36 @@
             transform: scale(0.98);
         }
 
-        .social-btn i {
+        /* ===== REAL GOOGLE BUTTON STYLING ===== */
+        .social-btn.google {
+            background: #ffffff;
+            border: 1.5px solid #dce0e6;
+            color: #3c4043;
+            font-weight: 500;
+            font-size: 15px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+        }
+
+        .social-btn.google:hover {
+            background: #f8f9fa;
+            border-color: #dadce0;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+            transform: translateY(-1px);
+        }
+
+        .social-btn.google i {
             font-size: 20px;
+            color: #4285f4;
             width: 24px;
             text-align: center;
         }
 
-        .social-btn.google i {
-            color: #ea4335;
+        .social-btn.google .google-text {
+            font-weight: 500;
+            color: #3c4043;
         }
 
         /* ===== FOOTER ===== */
@@ -265,6 +331,10 @@
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 480px) {
+            body {
+                padding: 12px;
+            }
+
             .content {
                 padding: 24px 16px 20px;
             }
@@ -283,7 +353,7 @@
             }
 
             .layout {
-                border-radius: 16px;
+                border-radius: 20px;
             }
 
             .footer {
@@ -311,53 +381,74 @@
         /* ===== TOAST ===== */
         .toast {
             position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 16px 24px;
-            border-radius: 12px;
-            color: #fff;
-            font-weight: 500;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            padding: 14px 28px;
+            border-radius: 14px;
+            background: #163300;
+            color: #9afe00;
+            font-weight: 600;
             font-size: 14px;
-            transform: translateX(120%);
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
             z-index: 1000;
-            max-width: 360px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.16);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .toast.show {
-            transform: translateX(0);
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast i {
+            font-size: 18px;
         }
 
         .toast.success {
-            background: #00b67a;
+            background: #163300;
+            color: #9afe00;
         }
 
         .toast.error {
             background: #e74c3c;
+            color: #ffffff;
         }
 
         .toast.info {
             background: #1a2b44;
+            color: #ffffff;
         }
     </style>
 </head>
 <body>
 
     <!-- ===== TOAST ===== -->
-    <div id="toast" class="toast"></div>
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Welcome back!</span>
+    </div>
 
     <!-- ===== MAIN LAYOUT ===== -->
     <div class="layout">
 
-        <!-- HEADER -->
+        <!-- HEADER - LOGO LEFT, CLOSE BUTTON RIGHT (ORIGINAL POSITION) -->
         <header class="header">
-            <a href="/" title="Go to homepage" class="logo-link">
-                <svg class="logo-svg" xmlns="http://www.w3.org/2000/svg" width="106" height="24" fill="none" viewBox="0 0 106 24">
+            <a href="index.html" title="Go to homepage" class="logo-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="106" height="24" fill="none" viewBox="0 0 106 24">
                     <path fill="#163300" d="M58.7377.358803h6.4982L61.9668 23.681h-6.4983L58.7377.358803Zm-8.1922 0L46.1602 13.794 44.2465.358803h-4.5448L33.9608 13.7541 33.2433.358803h-6.2991L29.1369 23.681h5.2226L40.818 8.93022 43.0904 23.681h5.1428L56.7249.358803h-6.1794ZM105.103 13.9136H89.6744c.0798 3.0299 1.8937 5.0233 4.5648 5.0233 2.0133 0 3.608-1.0765 4.8439-3.1296l5.2079 2.3674C102.501 21.7017 98.729 24 94.0798 24 87.741 24 83.535 19.7342 83.535 12.8771 83.535 5.34221 88.4784 0 95.4552 0c6.1398 0 10.0068 4.14618 10.0068 10.6046 0 1.0765-.12 2.1528-.359 3.309Zm-5.7807-4.46512c0-2.71095-1.515-4.42525-3.9468-4.42525-2.5117 0-4.5848 1.79402-5.143 4.42525h9.0898ZM6.63326 7.38685 0 15.1389h11.844l1.3309-3.6553H8.09965l3.10105-3.58555.01-.09511L9.19424 4.3319h9.07196l-7.0323 19.3492h4.8124L24.538.358823H2.60021L6.63326 7.38685Zm69.16744-2.3636c2.2923 0 4.301 1.23273 6.0551 3.34565l.9216-6.57488C81.1429.687707 78.9303 0 76 0c-5.8205 0-9.0896 3.40865-9.0896 7.73421 0 2.99999 1.6744 4.83389 4.4252 6.01989l1.3156.598c2.4518 1.0466 3.1097 1.5649 3.1097 2.6712 0 1.1461-1.1064 1.8737-2.7907 1.8737-2.7808.01-5.0332-1.4153-6.7276-3.8472l-.939 6.699C67.2332 23.2201 69.7067 24 72.9702 24c5.5315 0 8.9302-3.1894 8.9302-7.6147 0-3.0099-1.3355-4.9434-4.7044-6.4584l-1.4351-.67772c-1.9934-.88708-2.6711-1.37543-2.6711-2.35216 0-1.05647.9269-1.87377 2.7109-1.87377Z"/>
                 </svg>
             </a>
-            <div class="header-spacer"></div>
+
+            <!-- Close button (X) - kept for original look -->
+            <button class="close-btn" aria-label="Close" onclick="showToast('info', '👋 See you soon!')">
+                <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="m12 13.414-7.293 7.293-1.414-1.414L10.586 12 3.293 4.707l1.414-1.414L12 10.586l7.293-7.293 1.414 1.414L13.414 12l7.293 7.293-1.414 1.414z"/>
+                </svg>
+            </button>
         </header>
 
         <!-- ===== LOGIN PAGE ===== -->
@@ -375,7 +466,7 @@
                 <!-- Login Form -->
                 <form id="loginForm" onsubmit="handleLogin(event)">
 
-                    <!-- Email -->
+                    <!-- Email - CLEAN (no placeholder) -->
                     <div class="form-group">
                         <label for="email">Email address</label>
                         <input
@@ -386,7 +477,7 @@
                         />
                     </div>
 
-                    <!-- Password -->
+                    <!-- Password - CLEAN (no placeholder) -->
                     <div class="form-group">
                         <label for="password">Password</label>
                         <input
@@ -397,17 +488,18 @@
                         />
                     </div>
 
-                    <!-- Login Button - NEW COLOR -->
+                    <!-- Login Button -->
                     <button type="submit" class="btn-login" id="loginBtn">Log in</button>
                 </form>
 
                 <!-- Divider -->
                 <div class="divider">or log in with</div>
 
-                <!-- Social Buttons - ONLY GOOGLE -->
+                <!-- Social Buttons - REAL GOOGLE -->
                 <div class="social-buttons">
                     <button class="social-btn google" onclick="showToast('info', '🔐 Google login coming soon!')">
-                        <i class="fab fa-google"></i> Log in with Google
+                        <i class="fab fa-google"></i>
+                        <span class="google-text">Log in with Google</span>
                     </button>
                 </div>
 
@@ -429,7 +521,7 @@
                 <!-- Signup Form -->
                 <form id="signupForm" onsubmit="handleSignup(event)">
 
-                    <!-- Email -->
+                    <!-- Email - CLEAN (no placeholder) -->
                     <div class="form-group" style="text-align: left;">
                         <label for="signupEmail">First, enter your email address</label>
                         <input
@@ -438,21 +530,21 @@
                         name="email"
                         autocomplete="email"
                         required
-                        placeholder="name@example.com"
                         />
                     </div>
 
-                    <!-- Next Button - Same new color -->
+                    <!-- Next Button -->
                     <button type="submit" class="btn-login" id="signupBtn" style="opacity: 0.58;">Next</button>
                 </form>
 
                 <!-- Divider -->
                 <div class="divider">Or sign up with</div>
 
-                <!-- Social Buttons - ONLY GOOGLE -->
+                <!-- Social Buttons - REAL GOOGLE -->
                 <div class="social-buttons">
                     <button class="social-btn google" onclick="showToast('info', '🔐 Google sign-up coming soon!')">
-                        <i class="fab fa-google"></i> Sign up with Google
+                        <i class="fab fa-google"></i>
+                        <span class="google-text">Sign up with Google</span>
                     </button>
                 </div>
 
@@ -486,11 +578,17 @@
         }
 
         // ===== TOAST =====
+        let toastTimeout;
+
         function showToast(type, message) {
             const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.className = 'toast ' + type + ' show';
-            setTimeout(() => {
+            const toastMessage = document.getElementById('toastMessage');
+            toast.className = 'toast ' + type;
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
                 toast.classList.remove('show');
             }, 3000);
         }
@@ -519,6 +617,9 @@
                 btn.disabled = false;
                 btn.textContent = 'Log in';
                 showToast('success', '✅ Welcome back! Redirecting...');
+                setTimeout(() => {
+                    window.location.href = 'account.html';
+                }, 500);
             }, 2000);
         }
 
@@ -561,6 +662,9 @@
                     signupForm.dispatchEvent(new Event('submit'));
                 }
             }
+            if (e.key === 'Escape') {
+                document.getElementById('toast').classList.remove('show');
+            }
         });
 
         // ===== AUTO-FOCUS ON LOAD =====
@@ -569,8 +673,11 @@
         });
 
         console.log('🔥 Wise - Login Page');
-        console.log('✅ ONLY button color changed to #9afe00');
-        console.log('✅ Everything else is exactly as before');
+        console.log('✅ Logo in original position (left)');
+        console.log('✅ Close button (X) on the right');
+        console.log('✅ Clean input fields - no placeholder text');
+        console.log('✅ Real Google button styling');
+        console.log('✅ No "Log in" button in navbar');
     </script>
 
 </body>
