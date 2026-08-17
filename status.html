@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>Refund Status - Wise</title>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* ===== ANIMATED BACKGROUND ===== */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 30% 50%, rgba(154, 254, 0, 0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 80%, rgba(0, 182, 122, 0.06) 0%, transparent 50%);
+            z-index: -1;
+            animation: floatBackground 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes floatBackground {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            100% {
+                transform: translate(2%, 3%) rotate(3deg);
+            }
+        }
+
+        /* ===== MAIN CARD ===== */
+        .card {
+            width: 100%;
+            max-width: 480px;
+            background: #ffffff;
+            border-radius: 32px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 32px 80px rgba(0, 0, 0, 0.12);
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px 16px;
+            border-bottom: 1px solid #f0f2f5;
+            background: #ffffff;
+        }
+
+        .header .logo-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .header .logo-link svg {
+            height: 24px;
+            width: auto;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #6b7a8f;
+            padding: 4px;
+            border-radius: 50%;
+            transition: background 0.2s, color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            background: #f0f2f5;
+            color: #0a1e3c;
+        }
+
+        .close-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* ===== CONTENT ===== */
+        .content {
+            padding: 32px 28px 28px;
+            text-align: center;
+        }
+
+        /* ===== STATUS ICON ===== */
+        .status-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 36px;
+        }
+
+        .status-icon.approved {
+            background: rgba(154, 254, 0, 0.12);
+            color: #9afe00;
+            border: 2px solid rgba(154, 254, 0, 0.2);
+        }
+
+        .status-icon.declined {
+            background: rgba(239, 68, 68, 0.12);
+            color: #ef4444;
+            border: 2px solid rgba(239, 68, 68, 0.2);
+        }
+
+        /* ===== STATUS BADGE ===== */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 18px 6px 14px;
+            border-radius: 100px;
+            margin-bottom: 16px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .status-badge.approved {
+            background: rgba(154, 254, 0, 0.12);
+            color: #00b67a;
+            border: 1px solid rgba(154, 254, 0, 0.2);
+        }
+
+        .status-badge.declined {
+            background: rgba(239, 68, 68, 0.12);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .status-badge .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .status-badge.approved .dot {
+            background: #00b67a;
+        }
+
+        .status-badge.declined .dot {
+            background: #ef4444;
+        }
+
+        /* ===== TITLE ===== */
+        .title {
+            font-size: 24px;
+            font-weight: 800;
+            color: #0a1e3c;
+            margin-bottom: 8px;
+        }
+
+        .title.approved {
+            color: #00b67a;
+        }
+
+        .title.declined {
+            color: #ef4444;
+        }
+
+        .subtitle {
+            font-size: 15px;
+            color: #6b7a8f;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        /* ===== REFUND SUMMARY CARD ===== */
+        .summary-card {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 20px 24px;
+            text-align: left;
+            margin-bottom: 24px;
+            border: 1px solid #f0f2f5;
+        }
+
+        .summary-card .summary-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #6b7a8f;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 14px;
+        }
+
+        .summary-card .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f2f5;
+            font-size: 14px;
+        }
+
+        .summary-card .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        .summary-card .summary-row .label {
+            color: #6b7a8f;
+            font-weight: 500;
+        }
+
+        .summary-card .summary-row .value {
+            color: #0a1e3c;
+            font-weight: 600;
+        }
+
+        .summary-card .summary-row .value .highlight {
+            color: #9afe00;
+            background: rgba(154, 254, 0, 0.1);
+            padding: 1px 10px;
+            border-radius: 4px;
+            font-weight: 700;
+        }
+
+        .summary-card .summary-row .value .approved-text {
+            color: #00b67a;
+            font-weight: 600;
+        }
+
+        .summary-card .summary-row .value .declined-text {
+            color: #ef4444;
+            font-weight: 600;
+        }
+
+        /* ===== DECLINE REASON BOX ===== */
+        .decline-box {
+            background: #fef2f2;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            border-left: 3px solid #ef4444;
+            text-align: left;
+        }
+
+        .decline-box .decline-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #ef4444;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .decline-box .decline-reason {
+            font-size: 14px;
+            color: #1a2b44;
+            font-weight: 500;
+        }
+
+        .decline-box .decline-reason i {
+            color: #ef4444;
+            margin-right: 6px;
+        }
+
+        /* ===== AGREED TERMS ===== */
+        .terms-box {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            border: 1px solid #f0f2f5;
+            text-align: left;
+        }
+
+        .terms-box .terms-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #6b7a8f;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .terms-box .terms-text {
+            font-size: 14px;
+            color: #1a2b44;
+            line-height: 1.6;
+        }
+
+        .terms-box .terms-text i {
+            color: #9afe00;
+            margin-right: 4px;
+        }
+
+        /* ===== ACTION BUTTONS ===== */
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn-action {
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-family: inherit;
+        }
+
+        .btn-action-primary {
+            background: #9afe00;
+            color: #163300;
+            box-shadow: 0 4px 16px rgba(154, 254, 0, 0.25);
+        }
+
+        .btn-action-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(154, 254, 0, 0.35);
+        }
+
+        .btn-action-secondary {
+            background: transparent;
+            color: #0a1e3c;
+            border: 1.5px solid #dce0e6;
+        }
+
+        .btn-action-secondary:hover {
+            border-color: #163300;
+            background: rgba(22, 51, 0, 0.04);
+            transform: translateY(-2px);
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            padding: 16px 24px;
+            border-top: 1px solid #f0f2f5;
+            font-size: 13px;
+            color: #9aa8b9;
+            background: #fafbfc;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 480px) {
+            body {
+                padding: 12px;
+            }
+
+            .content {
+                padding: 24px 16px 20px;
+            }
+
+            .header {
+                padding: 16px 16px 12px;
+            }
+
+            .title {
+                font-size: 20px;
+            }
+
+            .summary-card {
+                padding: 16px;
+            }
+
+            .summary-card .summary-row {
+                font-size: 13px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 2px;
+                padding: 10px 0;
+            }
+
+            .status-icon {
+                width: 64px;
+                height: 64px;
+                font-size: 28px;
+            }
+
+            .btn-action {
+                font-size: 14px;
+                padding: 12px 20px;
+            }
+
+            .footer {
+                padding: 12px 16px;
+                font-size: 12px;
+            }
+
+            .decline-box,
+            .terms-box {
+                padding: 14px 16px;
+            }
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .card {
+            animation: fadeInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .status-icon {
+            animation: scaleIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f0f2f5;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #9afe00;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== MAIN CARD ===== -->
+    <div class="card">
+
+        <!-- HEADER -->
+        <header class="header">
+            <a href="index.html" title="Go to homepage" class="logo-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="106" height="24" fill="none" viewBox="0 0 106 24">
+                    <path fill="#163300" d="M58.7377.358803h6.4982L61.9668 23.681h-6.4983L58.7377.358803Zm-8.1922 0L46.1602 13.794 44.2465.358803h-4.5448L33.9608 13.7541 33.2433.358803h-6.2991L29.1369 23.681h5.2226L40.818 8.93022 43.0904 23.681h5.1428L56.7249.358803h-6.1794ZM105.103 13.9136H89.6744c.0798 3.0299 1.8937 5.0233 4.5648 5.0233 2.0133 0 3.608-1.0765 4.8439-3.1296l5.2079 2.3674C102.501 21.7017 98.729 24 94.0798 24 87.741 24 83.535 19.7342 83.535 12.8771 83.535 5.34221 88.4784 0 95.4552 0c6.1398 0 10.0068 4.14618 10.0068 10.6046 0 1.0765-.12 2.1528-.359 3.309Zm-5.7807-4.46512c0-2.71095-1.515-4.42525-3.9468-4.42525-2.5117 0-4.5848 1.79402-5.143 4.42525h9.0898ZM6.63326 7.38685 0 15.1389h11.844l1.3309-3.6553H8.09965l3.10105-3.58555.01-.09511L9.19424 4.3319h9.07196l-7.0323 19.3492h4.8124L24.538.358823H2.60021L6.63326 7.38685Zm69.16744-2.3636c2.2923 0 4.301 1.23273 6.0551 3.34565l.9216-6.57488C81.1429.687707 78.9303 0 76 0c-5.8205 0-9.0896 3.40865-9.0896 7.73421 0 2.99999 1.6744 4.83389 4.4252 6.01989l1.3156.598c2.4518 1.0466 3.1097 1.5649 3.1097 2.6712 0 1.1461-1.1064 1.8737-2.7907 1.8737-2.7808.01-5.0332-1.4153-6.7276-3.8472l-.939 6.699C67.2332 23.2201 69.7067 24 72.9702 24c5.5315 0 8.9302-3.1894 8.9302-7.6147 0-3.0099-1.3355-4.9434-4.7044-6.4584l-1.4351-.67772c-1.9934-.88708-2.6711-1.37543-2.6711-2.35216 0-1.05647.9269-1.87377 2.7109-1.87377Z"/>
+                </svg>
+            </a>
+            <button class="close-btn" aria-label="Close" onclick="window.location.href='index.html'">
+                <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="m12 13.414-7.293 7.293-1.414-1.414L10.586 12 3.293 4.707l1.414-1.414L12 10.586l7.293-7.293 1.414 1.414L13.414 12l7.293 7.293-1.414 1.414z"/>
+                </svg>
+            </button>
+        </header>
+
+        <!-- ============================================================ -->
+        <!-- ====== APPROVED STATE (Show this when admin approves) ======= -->
+        <!-- ============================================================ -->
+        <div id="approvedState">
+            <div class="content">
+
+                <!-- STATUS ICON -->
+                <div class="status-icon approved">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+
+                <!-- STATUS BADGE -->
+                <div class="status-badge approved">
+                    <span class="dot"></span>
+                    APPROVED
+                </div>
+
+                <!-- TITLE -->
+                <h1 class="title approved">Refund Approved! 🎉</h1>
+                <p class="subtitle">
+                    Your refund of <strong>$885 USD</strong> has been approved and will be processed shortly.
+                </p>
+
+                <!-- REFUND SUMMARY CARD -->
+                <div class="summary-card">
+                    <div class="summary-title">📋 Refund Details</div>
+                    <div class="summary-row">
+                        <span class="label">Amount</span>
+                        <span class="value"><span class="highlight">$885.00 USD</span></span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="label">Status</span>
+                        <span class="value"><span class="approved-text">✅ Approved</span></span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="label">Reference</span>
+                        <span class="value">#WISE-885-2026</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="label">Processed</span>
+                        <span class="value">August 18, 2026</span>
+                    </div>
+                </div>
+
+                <!-- AGREED TERMS -->
+                <div class="terms-box">
+                    <div class="terms-label">📝 Agreed Terms</div>
+                    <div class="terms-text">
+                        <i class="fas fa-check-circle"></i> Refund of <strong>$885.00 USD</strong> approved<br />
+                        <i class="fas fa-check-circle"></i> Funds will be deposited within 3-5 business days<br />
+                        <i class="fas fa-check-circle"></i> You'll receive a confirmation email shortly
+                    </div>
+                </div>
+
+                <!-- ACTION BUTTONS -->
+                <div class="action-buttons">
+                    <a href="index.html" class="btn-action btn-action-primary">
+                        <i class="fas fa-home"></i> Return to Home
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- ====== DECLINED STATE (Show this when admin declines) ====== -->
+        <!-- ============================================================ -->
+        <div id="declinedState" style="display: none;">
+            <div class="content">
+
+                <!-- STATUS ICON -->
+                <div class="status-icon declined">
+                    <i class="fas fa-times-circle"></i>
+                </div>
+
+                <!-- STATUS BADGE -->
+                <div class="status-badge declined">
+                    <span class="dot"></span>
+                    DECLINED
+                </div>
+
+                <!-- TITLE -->
+                <h1 class="title declined">Refund Declined</h1>
+                <p class="subtitle">
+                    We regret to inform you that your refund request has been declined.
+                </p>
+
+                <!-- DECLINE REASON -->
+                <div class="decline-box">
+                    <div class="decline-label">⚠️ Reason for Decline</div>
+                    <div class="decline-reason">
+                        <i class="fas fa-info-circle"></i> The refund request does not meet the eligibility criteria as per our terms and conditions.
+                    </div>
+                </div>
+
+                <!-- REFUND SUMMARY CARD -->
+                <div class="summary-card">
+                    <div class="summary-title">📋 Refund Details</div>
+                    <div class="summary-row">
+                        <span class="label">Amount</span>
+                        <span class="value"><span class="highlight">$885.00 USD</span></span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="label">Status</span>
+                        <span class="value"><span class="declined-text">❌ Declined</span></span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="label">Reference</span>
+                        <span class="value">#WISE-885-2026</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="label">Processed</span>
+                        <span class="value">August 18, 2026</span>
+                    </div>
+                </div>
+
+                <!-- AGREED TERMS -->
+                <div class="terms-box">
+                    <div class="terms-label">📝 What We Agreed</div>
+                    <div class="terms-text">
+                        <i class="fas fa-check-circle"></i> Refund of <strong>$885.00 USD</strong> was requested<br />
+                        <i class="fas fa-check-circle"></i> Eligibility criteria: Must meet all requirements<br />
+                        <i class="fas fa-check-circle"></i> You may appeal this decision within 30 days
+                    </div>
+                </div>
+
+                <!-- ACTION BUTTONS -->
+                <div class="action-buttons">
+                    <a href="index.html" class="btn-action btn-action-secondary">
+                        <i class="fas fa-home"></i> Return to Home
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            &copy; Wise Payments Limited 2026
+        </div>
+
+    </div>
+
+    <!-- ===== JAVASCRIPT ===== -->
+    <script>
+        // ============================================================
+        // TOGGLE BETWEEN APPROVED AND DECLINED STATES
+        // ============================================================
+        // Change this variable to 'approved' or 'declined' to test both states
+        const status = 'approved'; // Change to 'declined' to test declined state
+
+        if (status === 'approved') {
+            document.getElementById('approvedState').style.display = 'block';
+            document.getElementById('declinedState').style.display = 'none';
+        } else if (status === 'declined') {
+            document.getElementById('approvedState').style.display = 'none';
+            document.getElementById('declinedState').style.display = 'block';
+        }
+
+        // ============================================================
+        // CONSOLE
+        // ============================================================
+        console.log('🔥 Wise - Refund Status Page');
+        console.log('💰 Refund Amount: $885.00 USD');
+        console.log('📌 Status:', status.toUpperCase());
+        console.log('💡 Change "status" variable to "approved" or "declined" to test both states');
+    </script>
+
+</body>
+</html>
