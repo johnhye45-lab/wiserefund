@@ -88,7 +88,7 @@
             }
         }
 
-        /* ===== NAVBAR ===== */
+        /* ===== NAVBAR - NO LOGIN BUTTON ===== */
         .navbar {
             position: relative;
             z-index: 10;
@@ -151,17 +151,6 @@
             border-color: #9afe00;
             background: rgba(154, 254, 0, 0.08);
             transform: translateY(-2px);
-        }
-
-        .btn-nav-primary {
-            background: #163300;
-            color: #9afe00;
-        }
-
-        .btn-nav-primary:hover {
-            background: #1f4a00;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(22, 51, 0, 0.25);
         }
 
         /* ===== HERO SECTION ===== */
@@ -835,7 +824,7 @@
         <span id="toastMessage">Welcome to Wise!</span>
     </div>
 
-    <!-- ===== NAVBAR ===== -->
+    <!-- ===== NAVBAR - NO LOGIN BUTTON ===== -->
     <nav class="navbar fade-in">
         <a href="#" class="logo">
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 106 24">
@@ -847,9 +836,7 @@
             <a href="#" class="btn-nav btn-nav-outline">
                 <i class="far fa-question-circle"></i> Help
             </a>
-            <a href="login.html" class="btn-nav btn-nav-primary">
-                <i class="fas fa-arrow-right"></i> Log in
-            </a>
+            <!-- "Log in" button REMOVED -->
         </div>
     </nav>
 
@@ -1028,18 +1015,13 @@
             if (e.key === 'Escape') {
                 document.getElementById('toast').classList.remove('show');
             }
-            if (e.key === 'l' || e.key === 'L') {
-                if (!e.ctrlKey && !e.metaKey && document.activeElement.tagName !== 'INPUT') {
-                    window.location.href = 'login.html';
-                }
-            }
         });
 
         // ===== CONSOLE =====
         console.log('🔥 Wise Index Page');
         console.log('💰 Refund Amount: $885.00 USD');
-        console.log('✅ Button: "Claim Your Refund" → login.html');
-        console.log('💡 Press "L" to go to login');
+        console.log('✅ No "Log in" button in navbar');
+        console.log('✅ "Claim Your Refund" button takes users to login');
 
         // ===== SHOW WELCOME TOAST =====
         setTimeout(() => {
